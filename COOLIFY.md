@@ -8,12 +8,17 @@ na mesma revisão da tag 0.7.2.
 
 1. Crie uma aplicação a partir do repositório deste fork. Selecione a branch
    `feat/0.7.2-whatsapp-version`, use a estratégia **Docker Compose**, diretório
-   base `/` e localização `/compose.coolify.yaml`. Em **General > Build pipeline**,
-   habilite **Preserve repository during deployment** para manter o SQL de
-   inicialização do PostgreSQL disponível ao container.
+   base `/` e localização `/compose.coolify.yaml`.
 2. Configure `GLOBAL_API_KEY` com a chave administrativa da Evolution Go.
-   Gere `POSTGRES_PASSWORD` com `openssl rand -hex 32` para usar um valor seguro
-   que também seja válido dentro das URLs PostgreSQL.
+   No PostgreSQL existente, prepare dois bancos lógicos, por exemplo
+   `evogo_auth` (sessões do WhatsApp) e `evogo_users` (instâncias e dados da API).
+   Configure `POSTGRES_AUTH_DB` e `POSTGRES_USERS_DB` no Coolify com as URLs
+   completas dos respectivos bancos, incluindo usuário, senha, host, porta e
+   o modo TLS exigido pelo servidor. O usuário precisa poder criar e atualizar
+   tabelas nos bancos. Use um endereço acessível a partir do container.
+   Se o banco for outro recurso do Coolify na mesma rede privada de destino,
+   habilite **Connect to predefined network** e use o endereço interno
+   fornecido pelo recurso PostgreSQL.
 3. Deixe `WHATSAPP_VERSION_MAJOR`, `WHATSAPP_VERSION_MINOR` e
    `WHATSAPP_VERSION_PATCH` vazias para detecção automática. Para fixar uma
    revisão conhecida, preencha as três e reinicie a aplicação.
@@ -30,7 +35,5 @@ na mesma revisão da tag 0.7.2.
    conexão, o log mostra a versão usada como fallback. Reinicie o serviço
    para tentar detectar novamente.
 
-O PostgreSQL fica na rede interna do Compose. Os dois bancos são criados
-quando o volume do PostgreSQL é inicializado pela primeira vez. O health check
-em `/server/ok` indica que a API está respondendo. Valide a licença e o pareamento
-no Manager antes de apontar o SaaS para a instalação.
+O health check em `/server/ok` indica que a API está respondendo. Valide a
+licença e o pareamento no Manager antes de apontar o SaaS para a instalação.
