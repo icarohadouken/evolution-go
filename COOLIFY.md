@@ -18,14 +18,18 @@ na mesma revisão da tag 0.7.2.
    tabelas nos bancos. Use um endereço acessível a partir do container.
    Se o banco for outro recurso do Coolify na mesma rede privada de destino,
    habilite **Connect to predefined network** e use o endereço interno
-   fornecido pelo recurso PostgreSQL.
+   fornecido pelo recurso PostgreSQL. Para as duas URLs e a chave da API,
+   deixe **Runtime** habilitado e **Build time** desabilitado. Na visualização
+   Developer, use `# coolify: literal buildtime=false` imediatamente acima de
+   cada uma dessas variáveis.
 3. Deixe `WHATSAPP_VERSION_MAJOR`, `WHATSAPP_VERSION_MINOR` e
    `WHATSAPP_VERSION_PATCH` vazias para detecção automática. Para fixar uma
    revisão conhecida, preencha as três e reinicie a aplicação.
 4. Em **Domains**, associe o domínio de homologação ao serviço `evolution-go`,
-   com a porta interna `8080`. Exemplo `https://evo-teste.seudominio.com:8080`.
+   com a porta interna `4000`. Exemplo `https://evo-teste.seudominio.com:4000`.
+   Se você alterar `SERVER_PORT`, use a mesma porta no domínio do Coolify.
    Se for usar pareamento por passkey, configure `PASSKEY_PUBLIC_URL` com a
-   URL pública que o navegador acessa, normalmente sem o sufixo `:8080`.
+   URL pública que o navegador acessa, normalmente sem o sufixo `:4000`.
 5. Faça o deploy. Se a instalação pedir licença, siga a ativação em `/manager`.
    `EVOLUTION_OPERATOR_EMAIL` é opcional e serve para ativação automática quando
    o e-mail já está cadastrado.
@@ -34,6 +38,11 @@ na mesma revisão da tag 0.7.2.
    instância ficou conectada. Se a consulta ao WhatsApp Web falhar na primeira
    conexão, o log mostra a versão usada como fallback. Reinicie o serviço
    para tentar detectar novamente.
+
+Os padrões do Compose seguem a configuração ATiOS. A Evolution Go 0.7.2 lê
+`DEBUG_ENABLED` para o nível do whatsmeow e `LOG_TYPE` para o tipo de log.
+`WADEBUG` e `LOGTYPE` também são repassadas para facilitar reaproveitar a lista
+de variáveis existente.
 
 O health check em `/server/ok` indica que a API está respondendo. Valide a
 licença e o pareamento no Manager antes de apontar o SaaS para a instalação.

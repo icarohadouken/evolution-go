@@ -6,32 +6,46 @@ services:
         VERSION: 0.7.2-wa-version.1
     restart: unless-stopped
     expose:
-      - "8080"
+      - "${SERVER_PORT:-4000}"
     environment:
-      SERVER_PORT: "8080"
-      CLIENT_NAME: evolution
-      GLOBAL_API_KEY: "${GLOBAL_API_KEY:?}"
-      POSTGRES_AUTH_DB: "${POSTGRES_AUTH_DB:?}"
+      SERVER_PORT: "${SERVER_PORT:-4000}"
+      CLIENT_NAME: "${CLIENT_NAME:-ATiOS}"
+      DATABASE_SAVE_MESSAGES: "${DATABASE_SAVE_MESSAGES:-false}"
+      WADEBUG: "${WADEBUG:-WARN}"
+      DEBUG_ENABLED: "${DEBUG_ENABLED:-WARN}"
+      LOGTYPE: "${LOGTYPE:-console}"
+      LOG_TYPE: "${LOG_TYPE:-console}"
+      LOG_DIRECTORY: "${LOG_DIRECTORY:-/app/logs}"
+      LOG_MAX_SIZE: "${LOG_MAX_SIZE:-10}"
+      LOG_MAX_BACKUPS: "${LOG_MAX_BACKUPS:-3}"
+      LOG_MAX_AGE: "${LOG_MAX_AGE:-7}"
+      LOG_COMPRESS: "${LOG_COMPRESS:-true}"
+      CONNECT_ON_STARTUP: "${CONNECT_ON_STARTUP:-false}"
+      WEBHOOK_FILES: "${WEBHOOK_FILES:-false}"
+      WEBHOOK_URL: "${WEBHOOK_URL:-}"
+      AMQP_GLOBAL_ENABLED: "${AMQP_GLOBAL_ENABLED:-false}"
+      NATS_GLOBAL_ENABLED: "${NATS_GLOBAL_ENABLED:-false}"
+      MINIO_ENABLED: "${MINIO_ENABLED:-false}"
+      EVENT_IGNORE_GROUP: "${EVENT_IGNORE_GROUP:-true}"
+      EVENT_IGNORE_STATUS: "${EVENT_IGNORE_STATUS:-true}"
+      QRCODE_MAX_COUNT: "${QRCODE_MAX_COUNT:-5}"
+      TZ: "${TZ:-America/Sao_Paulo}"
       POSTGRES_USERS_DB: "${POSTGRES_USERS_DB:?}"
-      EVOLUTION_OPERATOR_EMAIL: "${EVOLUTION_OPERATOR_EMAIL:-}"
-      PASSKEY_PUBLIC_URL: "${PASSKEY_PUBLIC_URL:-}"
+      POSTGRES_AUTH_DB: "${POSTGRES_AUTH_DB:?}"
+      GLOBAL_API_KEY: "${GLOBAL_API_KEY:?}"
       WHATSAPP_VERSION_MAJOR: "${WHATSAPP_VERSION_MAJOR:-}"
       WHATSAPP_VERSION_MINOR: "${WHATSAPP_VERSION_MINOR:-}"
       WHATSAPP_VERSION_PATCH: "${WHATSAPP_VERSION_PATCH:-}"
-      CONNECT_ON_STARTUP: "true"
-      DATABASE_SAVE_MESSAGES: "false"
-      MINIO_ENABLED: "false"
-      WADEBUG: INFO
-      LOGTYPE: console
+      EVOLUTION_OPERATOR_EMAIL: "${EVOLUTION_OPERATOR_EMAIL:-}"
+      PASSKEY_PUBLIC_URL: "${PASSKEY_PUBLIC_URL:-}"
     volumes:
       - evolution-data:/app/dbdata
     healthcheck:
-      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/server/ok"]
+      test: ["CMD-SHELL", 'wget -q -O /dev/null "http://127.0.0.1:$$SERVER_PORT/server/ok"']
       interval: 20s
       timeout: 5s
       retries: 5
       start_period: 40s
-
 
 volumes:
   evolution-data:
