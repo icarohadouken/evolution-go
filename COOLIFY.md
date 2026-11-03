@@ -28,11 +28,7 @@ na mesma revisão da tag 0.7.2.
 4. Em **Domains**, associe o domínio de homologação ao serviço `evolution-go`,
    com a porta interna `4000`. Exemplo `https://evo-teste.seudominio.com:4000`.
    Se você alterar `SERVER_PORT`, use a mesma porta no domínio do Coolify.
-   Se for usar pareamento por passkey, configure `PASSKEY_PUBLIC_URL` com a
-   URL pública que o navegador acessa, normalmente sem o sufixo `:4000`.
 5. Faça o deploy. Se a instalação pedir licença, siga a ativação em `/manager`.
-   `EVOLUTION_OPERATOR_EMAIL` é opcional e serve para ativação automática quando
-   o e-mail já está cadastrado.
 6. Crie uma instância de teste e solicite o QR. Nos logs, procure
    `Applied WhatsApp handshake version`, escaneie o QR e confirme que a
    instância ficou conectada. Se a consulta ao WhatsApp Web falhar na primeira
